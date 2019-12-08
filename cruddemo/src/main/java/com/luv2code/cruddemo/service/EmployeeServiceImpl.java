@@ -1,44 +1,75 @@
 package com.luv2code.cruddemo.service;
 
 import com.luv2code.cruddemo.dao.EmployeeDAO;
+import com.luv2code.cruddemo.dao.EmployeeRepository;
 import com.luv2code.cruddemo.entity.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
-
-    private EmployeeDAO employeeDAO;
+    private EmployeeRepository employeeRepository;
 
     @Autowired
-    public EmployeeServiceImpl(EmployeeDAO theEmployeeDao){
-        this.employeeDAO = theEmployeeDao;
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository){
+        this.employeeRepository = employeeRepository;
     }
 
     @Override
-    @Transactional
     public List<Employee> findAll() {
-        return employeeDAO.findAll();
+        return this.employeeRepository .findAll();
     }
 
     @Override
-    @Transactional
     public Employee findById(int theId) {
-        return employeeDAO.findById(theId);
+        Optional<Employee> employeeOptional = this.employeeRepository.findById(theId);
+        return employeeOptional.isPresent() ? employeeOptional.get() : null;
     }
 
     @Override
-    @Transactional
     public Employee save(Employee theEmployee) {
-        return employeeDAO.save(theEmployee);
+        this.employeeRepository.save(theEmployee);
+        return theEmployee;
     }
 
     @Override
-    @Transactional
     public void deleteById(int theId) {
-        employeeDAO.deleteById(theId);
+        this.employeeRepository.deleteById(theId);
     }
+
+//    private EmployeeDAO employeeDAO;
+//
+//    @Autowired
+//    public EmployeeServiceImpl(@Qualifier("employeeDAOJpaImpl") EmployeeDAO theEmployeeDao){
+//        this.employeeDAO = theEmployeeDao;
+//    }
+//
+//    @Override
+//    @Transactional
+//    public List<Employee> findAll() {
+//        return employeeDAO.findAll();
+//    }
+//
+//    @Override
+//    @Transactional
+//    public Employee findById(int theId) {
+//        return employeeDAO.findById(theId);
+//    }
+//
+//    @Override
+//    @Transactional
+//    public Employee save(Employee theEmployee) {
+//        return employeeDAO.save(theEmployee);
+//    }
+//
+//    @Override
+//    @Transactional
+//    public void deleteById(int theId) {
+//        employeeDAO.deleteById(theId);
+//    }
 }
