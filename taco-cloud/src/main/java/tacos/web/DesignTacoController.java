@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
 import tacos.Ingredient;
 import tacos.Ingredient.Type;
+import tacos.Order;
 import tacos.Taco;
 import org.springframework.validation.Errors;
 import tacos.data.IngredientRepository;
+import tacos.data.TacoRepository;
 
 @Slf4j
 @Controller
@@ -26,16 +28,29 @@ import tacos.data.IngredientRepository;
 public class DesignTacoController {
 
     private final IngredientRepository ingredientRepository;
+    private final TacoRepository tacoRepository;
+
 
     @Autowired
-    public DesignTacoController(IngredientRepository ingredientRepository){
+    public DesignTacoController(IngredientRepository ingredientRepository, TacoRepository tacoRepository){
         this.ingredientRepository = ingredientRepository;
+        this.tacoRepository = tacoRepository;
+    }
+
+    @ModelAttribute(name = "order")
+    public Order order() {
+        return new Order();
+    }
+
+    @ModelAttribute(name = "design")
+    public Taco taco() {
+        return new Taco();
     }
 
     @GetMapping
     public String showDesignForm(Model model) {
         buldIngredents(model);
-        model.addAttribute("design", new Taco());
+
         return "design";
     }
 
@@ -50,14 +65,16 @@ public class DesignTacoController {
     }
 
     @PostMapping
-    public String processDesign(@Valid @ModelAttribute("design") Taco design, Errors errors, Model model) {
+    public String processDesign(@Valid @ModelAttribute("design") Taco design, Errors errors, Model model, @ModelAttribute Order order) {
         if (errors.hasErrors()) {
             buldIngredents(model);
             return "design";
         }
     // Save the taco design...
+        Taco savedTaco = this.tacoRepository.save(design);
+        order.addDesign(savedTaco);
     // We'll do this in chapter 3
-            log.info("Processing design: " + design);
+        log.info("Processing design: " + design);
         return "redirect:/orders/current";
     }
 
