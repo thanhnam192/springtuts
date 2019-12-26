@@ -65,7 +65,7 @@ public class DesignTacoController {
     }
 
     @PostMapping
-    public String processDesign(@Valid @ModelAttribute(name = "design") Taco design, Errors errors, Model model, @ModelAttribute Order order) {
+    public String processDesign(@Valid @ModelAttribute("design") Taco design, Errors errors, Model model, @ModelAttribute Order order) {
         if (errors.hasErrors()) {
             buldIngredents(model);
             return "design";

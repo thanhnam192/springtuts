@@ -14,6 +14,8 @@ import org.springframework.web.bind.support.SessionStatus;
 import tacos.Order;
 import tacos.data.OrderRepository;
 
+import java.util.List;
+
 
 @Slf4j
 @Controller
@@ -41,5 +43,13 @@ public class OrderController {
         sessionStatus.setComplete();
         log.info("Order submitted: " + order);
         return "redirect:/";
+    }
+
+    @GetMapping("/zip")
+    public String showOrderByZup( @RequestParam String zip ,Model model){
+        List<Order> byDeliveryZip = this.orderRepository.findByDeliveryZip(zip);
+        model.addAttribute("orders", byDeliveryZip);
+
+        return "orderZip";
     }
 }
