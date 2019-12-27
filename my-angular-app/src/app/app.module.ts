@@ -4,14 +4,14 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { CustomersModule} from './customers/customers.module';
 import { SharedModule } from './shared/shared.module';
-import { FormsModule } from '@angular/forms';
+import { CoreModule } from './core/core.module';
 
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
-    BrowserModule, CustomersModule, SharedModule
+    BrowserModule, CustomersModule, SharedModule, CoreModule
   ],
   providers: [],
   bootstrap: [AppComponent]
