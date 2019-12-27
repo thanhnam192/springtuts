@@ -16,8 +16,11 @@ export class CustomersListComponent implements OnInit {
   }
 
   set customers(value: ICustomer[]) {
-    this.filteredCustomers = this._customers = value;
-    this.calculateOrders();
+    if (value){
+      this.filteredCustomers = this._customers = value;
+      this.calculateOrders();
+    }
+  
   }
 
 
